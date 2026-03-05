@@ -21,7 +21,7 @@ module alu#(
 wire do_add = (SEL == 4'b0000);
 wire do_sub = (SEL == 4'b0001);
 wire do_and = (SEL == 4'b0010);
-wire do_or = (SEl == 4'b0011);
+wire do_or = (SEL == 4'b0011);
 wire do_xor = (SEL == 4'b0100);
 wire do_nor = (SEL == 4'b0101);
 wire do_sll = (SEL == 4'b0110);
@@ -35,55 +35,57 @@ wire [WIDTH-1:0] a_arith = (do_add | do_sub) ? A : {WIDTH{1'b0}};
 wire [WIDTH-1:0] b_arith = (do_add | do_sub) ? (do_sub ? ~B : B) : {WIDTH{1'b0}};
 wire [WIDTH-1:0] a_log = (do_and | do_or | do_nor | do_xor) ? A : {WIDTH{1'b0}};
 wire [WIDTH-1:0] b_log = (do_and | do_or | do_nor | do_xor) ? B : {WIDTH{1'b0}};
-wire [WIDTH-1:0] a_sh = (do_sll | do_srl | do_sra) A : {WIDTH{1'b0}};
-wire [WIDTH-1:0] b_sh = (do_sll | do_srl | do_sra) B : {WIDTH{1'b0}};
+wire [WIDTH-1:0] a_sh = (do_sll | do_srl | do_sra) ? A : {WIDTH{1'b0}};
+wire [WIDTH-1:0] b_sh = (do_sll | do_srl | do_sra) ? B : {WIDTH{1'b0}};
 wire cin = do_sub ? 1'b1 : 1'b0;
-wire cout;
-wire [4:0] shamt = b_sh[4:0]
+reg cout;
+wire [$clog2(WIDTH)-1:0] shamt = b_sh[$clog2(WIDTH)-1:0];
 
-wire [WIDTH-1:0] y_next;
-wire z;
-wire o;
-wire c;
-wire n;
+reg [WIDTH-1:0] y_next;
+reg z;
+reg o;
+reg c;
+reg n;
 always @(*) begin
-    if (do_add | do_sub) begin 
-        assign {cout,y_next} = a_arith + b_arith + cin;
+    cout = 1'b0;
+    y_next = {WIDTH{1'b0}};
+    if (do_add || do_sub) begin 
+         {cout,y_next} = a_arith + b_arith + cin;
     end
     else if (do_and) begin
-        assign y_next = a_log & b_log;
+         y_next = a_log & b_log;
     end
     else if (do_or) begin
-        assign y_next = a_log | b_log;
+         y_next = a_log | b_log;
     end
     else if (do_xor) begin
-        assign y_next = a_log ^ b_log;
+         y_next = a_log ^ b_log;
     end
     else if (do_nor) begin
-        assign y_next = ~(a_log | b_log);
+         y_next = ~(a_log | b_log);
     end
     else if (do_sll) begin
-        assign y_next = a_sh << shamt;
+         y_next = a_sh << shamt;
     end
     else if (do_srl) begin
-        assign y_next = a_sh >> shamt;
+         y_next = a_sh >> shamt;
     end
     else if (do_sra) begin
-        assign y_next = $signed(a_sh) >>> shamt;
+         y_next = $signed(a_sh) >>> shamt;
     end
     else if (do_slt) begin
-        assign y_next = ($signed(A) < $signed(B)) ? {{(WIDTH-1){1'b0}},1'b1} : {WIDTH{1'b0}};
+         y_next = ($signed(A) < $signed(B)) ? {{(WIDTH-1){1'b0}},1'b1} : {WIDTH{1'b0}};
     end
     else if (do_a) begin
-        assign y_next = A;
+         y_next = A;
     end
     else begin
-        assign y_next = B;
+         y_next = B;
     end
     z = (y_next == {WIDTH{1'b0}});
-    n = (cout == 1'b1);
-    c = y_next[WIDTH];
-    o = y_next[WIDTH]^y_next[WIDTH-1];
+    n = y_next[WIDTH-1];
+    c = cout;
+    o = (a_arith[WIDTH-1] ^ y_next[WIDTH-1]) & (b_arith[WIDTH-1] ^ y_next[WIDTH-1]);
 end 
 
 always @(posedge CLK or negedge RST) begin
@@ -96,10 +98,15 @@ always @(posedge CLK or negedge RST) begin
     end
     else if(EN) begin
         Y <= y_next;
-        O <= o;
         Z <= z;
         C <= c;
         N <= n;
+        if (do_add || do_sub) begin
+        o = (a_arith[WIDTH-1] ^ y_next[WIDTH-1]) & (b_arith[WIDTH-1] ^ y_next[WIDTH-1]);
+        end
+        else begin
+        o = 1'b0;
+        end
     end
 end
 endmodule
