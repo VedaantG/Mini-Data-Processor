@@ -2,7 +2,7 @@
 //opcodes
 //0000:add , 0001:sub, 0010:and, 0011:or, 0100:xor,0101:nor
 //0110:sll, 0111:srl, 1000sra, 1001:slt, 1010:pass_a, 1011:pass_b
-`timescale 1ps/1ns
+`timescale 1ns/1ps
 module alu#(
     parameter integer WIDTH = 8
 )(
@@ -102,10 +102,10 @@ always @(posedge CLK or negedge RST) begin
         C <= c;
         N <= n;
         if (do_add || do_sub) begin
-        o = (a_arith[WIDTH-1] ^ y_next[WIDTH-1]) & (b_arith[WIDTH-1] ^ y_next[WIDTH-1]);
+        o <= (a_arith[WIDTH-1] ^ y_next[WIDTH-1]) & (b_arith[WIDTH-1] ^ y_next[WIDTH-1]);
         end
         else begin
-        o = 1'b0;
+        o <= 1'b0;
         end
     end
 end
