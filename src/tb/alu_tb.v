@@ -33,7 +33,7 @@ initial begin
 end
 always #5 CLK = ~CLK;
 initial begin 
-    $dumpfile("alu_op.vcd");
+    $dumpfile("sim/alu_op.vcd");
     $dumpvars(0,alu_tb);
     //initialize
     RST = 0;
