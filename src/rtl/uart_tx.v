@@ -13,23 +13,70 @@ module uart_tx#(
 );
 localparam IDLE = 2'b00;
 localparam START = 2'b01;
-localparam DATA = 2'b10;
+localparam DATA_STATE = 2'b10;
 localparam STOP = 2'b11;
 
-reg [16:0] CLK_COUNT;
-reg [WIDTH-1:0] TX_SHIFT_REG;
-reg [$clog2(WIDTH)-1:0] BIT_INDEX;
+reg [$clog2(CLK_PER_BIT):0] CLK_COUNT;
+reg [WIDTH-1:0] TX_DATA_REG;
+reg [$clog2(WIDTH):0] BIT_INDEX;
 reg [1:0] STATE;
 
 always @(posedge CLK or negedge RST_N) begin
     if(!RST_N) begin
         CLK_COUNT <= 0;
-    end else if (CLK_COUNT < CLK_PER_BIT-1) begin
+    end else if ((CLK_COUNT < CLK_PER_BIT-1) && STATE != IDLE) begin
         CLK_COUNT <= CLK_COUNT + 1;
     end else begin
         CLK_COUNT <= 0;
     end
 end
 
+always @(posedge CLK or negedge RST_N) begin
+    if(!RST_N) begin
+        STATE <= IDLE;
+        BIT_INDEX <= 0;
+        TX_DATA_REG <= 0;
+    end else begin
+        case (STATE) 
+        IDLE : begin
+            if(TX_START) begin
+                STATE <= START;
+                TX_DATA_REG <= DATA;
+                BIT_INDEX <= 0;
+            end
+        end
+        START: begin
+            if (CLK_COUNT == CLK_PER_BIT-1) begin
+                STATE <= DATA_STATE;
+            end
+        end
+        DATA_STATE : begin
+            if (BIT_INDEX == WIDTH-1 && CLK_COUNT == CLK_PER_BIT-1) begin
+                STATE <= STOP;
+            end else if (CLK_COUNT == CLK_PER_BIT-1) begin
+                BIT_INDEX <= BIT_INDEX + 1;
+            end
+        end
+        STOP : begin
+            if (CLK_COUNT == CLK_PER_BIT-1) begin
+                STATE <= IDLE;
+            end
+        end
+        default : begin
+            STATE <= IDLE;
+        end
+        endcase
+    end
+end
+
+always @(*) begin
+    case(STATE)
+    START: D_OUT = 0;
+    DATA_STATE: D_OUT = TX_DATA_REG[BIT_INDEX];
+    STOP: D_OUT = 1;
+    default: D_OUT = 1;
+    endcase
+    BUSY = (STATE != IDLE);
+end
 
 endmodule
