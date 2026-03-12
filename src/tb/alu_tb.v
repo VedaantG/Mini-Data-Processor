@@ -33,7 +33,7 @@ initial begin
 end
 always #5 CLK = ~CLK;
 initial begin 
-    $dumpfile("sim/alu_op.vcd");
+    $dumpfile("waveform/alu_op.vcd");
     $dumpvars(0,alu_tb);
     //initialize
     RST = 0;
@@ -59,7 +59,7 @@ initial begin
     B = 8'd5;
     SEL = 4'b0000;
 
-    //sup
+    //sub
     #10
     A = 8'd10;
     B = 8'd3;
