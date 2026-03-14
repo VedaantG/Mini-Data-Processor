@@ -64,7 +64,7 @@ initial begin
 
     #10
     TX_START = 0;
-    
+
     #2083800
     RST_N = 1;
 

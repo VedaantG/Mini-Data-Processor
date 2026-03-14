@@ -1,7 +1,7 @@
 module uart_tx#(
     parameter integer WIDTH = 8,
     parameter integer FREQUENCY = 50000000,
-    parameter integer BAUD_RATE = 9600,
+    parameter integer BAUD_RATE = 10000000,
     parameter integer CLK_PER_BIT = ((FREQUENCY + BAUD_RATE)/2)/BAUD_RATE
 )(
     input wire CLK,
@@ -39,7 +39,7 @@ always @(posedge CLK or negedge RST_N) begin
     end else begin
         case (STATE) 
         IDLE : begin
-            if(TX_START) begin
+            if(TX_START && !BUSY) begin
                 STATE <= START;
                 TX_DATA_REG <= DATA;
                 BIT_INDEX <= 0;
