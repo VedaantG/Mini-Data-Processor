@@ -54,7 +54,7 @@ task send_byte(input [7:0] byte);
 endtask
 
 initial begin
-    $dumpfile("waveform/uart_rx_tb.vcd");
+    $dumpfile("waveform/uart_rx_op.vcd");
     $dumpvars(0, uart_rx_tb);
 
 
