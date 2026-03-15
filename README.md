@@ -14,7 +14,7 @@ Signed less than, Pass A, Pass B
 This operations are used to process upcoming data in various tasks and helps to reduce load on main processor
 or microcontroller
 
-#UART
+#UART#
 This IP consists of two blocks Transmitter and Reciver which is used to recive commands from main cpu and transfer
 processed data back to main cpu. It is a asynchronous form of communication means no shared clock between transmitter
 and reciver. For noise reduction reciver uses oversampling for accurate mid bit sampling to ensure communication will
