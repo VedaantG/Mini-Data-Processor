@@ -1,5 +1,5 @@
 module uart_rx #(
-    parameter WIDTH = 8,
+    parameter WIDTH = 20,
     parameter FREQUENCY = 50_000_000,
     parameter BAUD_RATE = 115200
 )(
@@ -89,8 +89,6 @@ always @(posedge CLK or negedge RST_N) begin
         endcase
     end
 end
-
-always @(*) BUSY = (state != IDLE);
 
 endmodule
 //hell yeah
