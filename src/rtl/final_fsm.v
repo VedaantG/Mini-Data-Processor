@@ -1,15 +1,15 @@
 module final_fsm#(
     WIDTH = 8,
     OPRAND_LENGTH = 8,
-    //uart frame is 20 bits 4,   8,   8
-    //                      ^    ^    ^
-    //                     opcode
+    //uart frame is 20 bits   4,           8,            8
+    //                        ^            ^             ^
+    //                      opcode     operand a     operand b
 )(
     input wire clk,
     input wire RST_N,
 
     input wire fifo_empty,
-    input wire [//:0] fifo_data,
+    input wire [19:0] fifo_data,
     input wire [WIDTH-1:0] alu_result,
     input wire alu_done,
     input wire tx_busy,
@@ -34,6 +34,10 @@ localparam SEND_RESULT = 2'b11;
 always@(posedge clk or negedge RST_N) begin
     if(!RST_N) begin
         STATE <= IDLE;
+        opcode <= 0;
+        oprand_a <= 0;
+        oprand_b <= 0;
+        uart_tx_data <= 0;
     end else begin
         fifo_read_en <= 0;
         alu_start <= 0;
@@ -42,13 +46,13 @@ always@(posedge clk or negedge RST_N) begin
         IDLE: begin
             if (!fifo_empty) begin
                 STATE <= FETCH;
+                fifo_read_en <= 1;
             end
         end
         FETCH:begin
-            fifo_read_en <= 1;
-            opcode <= fifo_data[//://]; //19:16
-            oprand_a <= fifo_data[//://2]; //15:8
-            oprand_b <= fifo_data[//3:0]; //7:0
+            opcode <= fifo_data[19:16];
+            oprand_a <= fifo_data[15:8];
+            oprand_b <= fifo_data[7:0];
             STATE <= EXECUTE;
             alu_start <= 1;
         end
