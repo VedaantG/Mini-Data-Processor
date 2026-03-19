@@ -38,7 +38,6 @@ always @(posedge CLK or negedge RST_N) begin
         data_shift <= 0;
         RX_DONE <= 0;
         RX_BUSY <= 0;
-        READ_EN <= 0;
     end else begin
         RX_DONE <= 0;
         case(state)
@@ -78,7 +77,6 @@ always @(posedge CLK or negedge RST_N) begin
             clk_count <= clk_count + 1;
             if(clk_count == CLK_PER_BIT/2) begin
                 if(d_sync2 == 1) begin
-                    READ_EN <= 1;
                     DATA <= data_shift;
                     RX_DONE <= 1;
                 end

@@ -57,7 +57,7 @@ endtask
 // -----------------------------
 initial begin
 
-    $dumpfile("data_processor.vcd");
+    $dumpfile("waveform/data_processor.vcd");
     $dumpvars(0, data_processor_tb);
 
     uart_rx = 1;

@@ -44,7 +44,7 @@ uart_rx uart_rx_inst(
 );
 
 wire uart_tx_start;
-wire [WIDTH-1:0] uart_tx_data;
+wire [FRAME_WIDTH-1:0] uart_tx_data;
 wire tx_busy;
 
 uart_tx uart_tx_inst(

@@ -10,7 +10,7 @@ module final_fsm#(
 
     input wire fifo_empty,
     input wire [19:0] fifo_data,
-    input wire [WIDTH-1:0] alu_result,
+    input wire [OPRAND_LENGTH-1:0] alu_result,
     input wire alu_done,
     input wire tx_busy,
     input wire rx_busy,
@@ -46,7 +46,7 @@ always@(posedge clk or negedge RST_N) begin
         uart_tx_start <= 0;
         case(STATE)
         IDLE: begin
-            if (!fifo_empty && !rx_busy && rx_done) begin
+            if (!fifo_empty && !rx_busy) begin
                 STATE <= FETCH;
                 fifo_read_en <= 1;
             end
@@ -65,7 +65,7 @@ always@(posedge clk or negedge RST_N) begin
         end
         SEND_RESULT:begin
             if(!tx_busy)begin
-                uart_tx_data <= alu_result;
+                uart_tx_data <= {12'b0,alu_result};
                 uart_tx_start <= 1;
                 STATE <= IDLE;
             end
