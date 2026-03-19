@@ -6,9 +6,10 @@ module uart_rx #(
     input wire CLK,
     input wire RST_N,
     input wire D_IN,
-    output reg BUSY,
+    output reg RX_BUSY,
     output reg [WIDTH-1:0] DATA,
-    output reg RX_DONE
+    output reg RX_DONE,
+    output reg READ_EN
 );
 
 localparam integer CLK_PER_BIT = FREQUENCY / BAUD_RATE;
@@ -37,17 +38,18 @@ always @(posedge CLK or negedge RST_N) begin
         bit_index <= 0;
         data_shift <= 0;
         RX_DONE <= 0;
-        BUSY <= 0;
+        RX_BUSY <= 0;
+        READ_EN <= 0;
     end else begin
         RX_DONE <= 0;
         case(state)
         IDLE: begin
-            BUSY <= 0;
+            RX_BUSY <= 0;
             clk_count <= 0;
             bit_index <= 0;
             if(d_sync2 == 0) begin
                 state <= START;
-                BUSY <= 1;
+                RX_BUSY <= 1;
             end
         end
         START: begin
@@ -77,6 +79,7 @@ always @(posedge CLK or negedge RST_N) begin
             clk_count <= clk_count + 1;
             if(clk_count == CLK_PER_BIT/2) begin
                 if(d_sync2 == 1) begin
+                    READ_EN <= 1;
                     DATA <= data_shift;
                     RX_DONE <= 1;
                 end

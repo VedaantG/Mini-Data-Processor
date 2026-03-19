@@ -16,7 +16,7 @@ module alu#(
     output reg O,
     output reg C,
     output reg N,
-    output reg DONE,
+    output reg ALU_DONE,
     output reg [WIDTH-1:0] Y
 );
 wire do_add = (SEL == 4'b0000);
@@ -96,14 +96,14 @@ always @(posedge CLK or negedge RST_N) begin
         O <= 1'b0;
         C <= 1'b0;
         N <= 1'b0;
-        DONE <= 0;
+        ALU_DONE <= 0;
     end
     else if(EN) begin
         Y <= y_next;
         Z <= z;
         C <= c;
         N <= n;
-        DONE <= EN;
+        ALU_DONE <= EN;
         if (do_add || do_sub) begin
         o <= (a_arith[WIDTH-1] ^ y_next[WIDTH-1]) & (b_arith[WIDTH-1] ^ y_next[WIDTH-1]);
         end

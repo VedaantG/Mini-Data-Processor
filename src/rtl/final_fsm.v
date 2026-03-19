@@ -1,6 +1,6 @@
 module final_fsm#(
-    WIDTH = 8,
-    OPRAND_LENGTH = 8,
+    WIDTH = 20,
+    OPRAND_LENGTH = 8
     //uart frame is 20 bits   4,           8,            8
     //                        ^            ^             ^
     //                      opcode     operand a     operand b

@@ -21,9 +21,9 @@ reg [$clog2(DEPTH):0] count;
 assign empty = (count == 0);
 assign full  = (count == DEPTH);
 
-always @(posedge clk or posedge reset)
+always @(posedge clk or negedge reset)
 begin
-    if(reset)
+    if(!reset)
     begin
         wr_ptr <= 0;
         rd_ptr <= 0;
@@ -33,21 +33,18 @@ begin
     else
     begin
 
-        /* WRITE OPERATION */
         if(write_en && !full)
         begin
             mem[wr_ptr] <= data_in;
             wr_ptr <= wr_ptr + 1;
         end
 
-        /* READ OPERATION */
         if(read_en && !empty)
         begin
             data_out <= mem[rd_ptr];
             rd_ptr <= rd_ptr + 1;
         end
 
-        /* COUNT MANAGEMENT */
         case ({write_en && !full, read_en && !empty})
 
             2'b10: count <= count + 1;  // write only
