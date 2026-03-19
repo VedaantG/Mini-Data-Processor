@@ -8,8 +8,7 @@ module uart_rx #(
     input wire D_IN,
     output reg RX_BUSY,
     output reg [WIDTH-1:0] DATA,
-    output reg RX_DONE,
-    output reg READ_EN
+    output reg RX_DONE
 );
 
 localparam integer CLK_PER_BIT = FREQUENCY / BAUD_RATE;

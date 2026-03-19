@@ -1,4 +1,4 @@
-module fifo #(parameter DATA_WIDTH = 8, parameter DEPTH = 16) (
+module fifo #(parameter DATA_WIDTH = 20, parameter DEPTH = 256) (
     input wire clk,
     input wire reset,
     input wire write_en,

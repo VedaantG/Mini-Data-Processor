@@ -1,5 +1,5 @@
 module uart_tx#(
-    parameter integer WIDTH = 20,
+    parameter integer WIDTH = 8,
     parameter integer FREQUENCY = 50000000,
     parameter integer BAUD_RATE = 115200,
     parameter integer CLK_PER_BIT = ((FREQUENCY + BAUD_RATE)/2)/BAUD_RATE
