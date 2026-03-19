@@ -25,7 +25,7 @@ alu alu_inst(
     .SEL(opcode),
     .A(oprand_a),
     .B(oprand_b),
-    .DONE(alu_done),
+    .ALU_DONE(alu_done),
     .Y(alu_result),
     .RST_N(RST_N)
 );
