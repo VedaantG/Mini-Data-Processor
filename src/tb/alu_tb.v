@@ -5,7 +5,7 @@ reg signed [WIDTH-1:0] A;
 reg signed [WIDTH-1:0] B;
 reg [3:0] SEL;
 reg EN;
-reg RST;
+reg RST_N;
 reg CLK;
 wire Z;
 wire O;
@@ -20,7 +20,7 @@ alu#(
     .B(B),
     .SEL(SEL),
     .EN(EN),
-    .RST(RST),
+    .RST_N(RST_N),
     .CLK(CLK),
     .Z(Z),
     .O(O),
@@ -36,7 +36,7 @@ initial begin
     $dumpfile("waveform/alu_op.vcd");
     $dumpvars(0,alu_tb);
     //initialize
-    RST = 0;
+    RST_N = 0;
     EN  = 0;
     A = 0;
     B = 0;
@@ -44,7 +44,7 @@ initial begin
 
     //rst
     #10
-    RST = 1;
+    RST_N = 1;
     EN  = 1;
 
     //add
@@ -115,7 +115,21 @@ initial begin
     B = 8'd77;
     SEL = 4'b1011;
 
+    #10
+    A = 8'h07;
+    B = 8'h02;
+    SEL = 4'b1100;
+
+    #10
+    A = 8'h08;
+    B = 8'h02;
+    SEL = 4'b1101;
+
+    #10
+    SEL = 4'b1111;
+
+    #100
+
     $finish;
 end
-
 endmodule

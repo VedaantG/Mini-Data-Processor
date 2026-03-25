@@ -31,9 +31,11 @@ wire do_sra = (SEL == 4'b1000);
 wire do_slt = (SEL == 4'b1001);
 wire do_a = (SEL == 4'b1010);
 wire do_b = (SEL == 4'b1011);
+wire do_mul = (SEL == 4'b1100);
+wire do_div = (SEL == 4'b1101);
 
-wire [WIDTH-1:0] a_arith = (do_add | do_sub) ? A : {WIDTH{1'b0}};
-wire [WIDTH-1:0] b_arith = (do_add | do_sub) ? (do_sub ? ~B : B) : {WIDTH{1'b0}};
+wire [WIDTH-1:0] a_arith = (do_add | do_sub | do_mul | do_div) ? A : {WIDTH{1'b0}};
+wire [WIDTH-1:0] b_arith = (do_add | do_sub | do_mul | do_div) ? (do_sub ? ~B : B) : {WIDTH{1'b0}};
 wire [WIDTH-1:0] a_log = (do_and | do_or | do_nor | do_xor) ? A : {WIDTH{1'b0}};
 wire [WIDTH-1:0] b_log = (do_and | do_or | do_nor | do_xor) ? B : {WIDTH{1'b0}};
 wire [WIDTH-1:0] a_sh = (do_sll | do_srl | do_sra) ? A : {WIDTH{1'b0}};
@@ -80,8 +82,17 @@ always @(*) begin
     else if (do_a) begin
          y_next = A;
     end
-    else begin
+    else if (do_b) begin
          y_next = B;
+    end
+    else if (do_mul) begin
+          y_next = a_arith * b_arith;
+    end
+    else if (do_div) begin
+          y_next = a_arith / b_arith;
+    end
+    else begin
+          y_next = {WIDTH{1'b0}};
     end
     z = (y_next == {WIDTH{1'b0}});
     n = y_next[WIDTH-1];
