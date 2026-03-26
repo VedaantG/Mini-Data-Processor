@@ -11,7 +11,7 @@ can be used for various tasks such as data filtering , signal processing, ML Acc
 It is a combinational circuit used for arithmatic and logical operations. ALU in this project performs following
 operations such as ADD, SUB, AND, OR etc (refer following table)
 
----------------------------------
+
 |  opcode      |      operation |
 |  0000        |      add       |
 |  0001        |      sub       |
@@ -27,7 +27,7 @@ operations such as ADD, SUB, AND, OR etc (refer following table)
 |  1011        |      pass b    |
 |  1100        |      mul       |
 |  1101        |      div       |
----------------------------------
+
 This operations are used to process upcoming data in various tasks and helps to reduce load on main processor
 or microcontroller
 
