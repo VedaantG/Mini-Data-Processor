@@ -13,15 +13,15 @@ operations such as ADD, SUB, AND, OR etc (refer following table)
 
 
 0000 : add
-0001 : sub   
-0010 : and   
-0011 : or    
-0100 : xor   
-0101 : nor   
-0110 : sll   
-0111 : srl   
-1000 : sra   
-1001 : slt   
+0001 : sub  
+0010 : and
+0011 : or
+0100 : xor
+0101 : nor
+0110 : sll
+0111 : srl
+1000 : sra
+1001 : slt
 1010 : pass a
 1011 : pass b
 1100 : mul
@@ -40,7 +40,5 @@ have great noise tolerence.
 It is used as a data buffer between Uart Reciver and Alu to ensure all the data bits are
 recived properly before giving it to Alu. It uses First in first out approach to suite
 the operations of data processor.
-
-# Address decoder
 
 # Register file
