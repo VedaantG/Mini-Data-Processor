@@ -22,19 +22,6 @@ integer i;
 integer k;
 assign one_hot = (1 << WRITE_ADDR);
 
-always @(*) begin
-    if(WRITE_EN && (WRITE_ADDR == READ_ADDR1)) begin
-        READ_DATA1 = WRITE_DATA;
-    end else begin
-        READ_DATA1 = register[READ_ADDR1];
-    end
-    if(WRITE_EN && (WRITE_ADDR == READ_ADDR2)) begin
-        READ_DATA2 = WRITE_DATA;
-    end else begin
-        READ_DATA2 = register[READ_ADDR2];
-    end
-end
-
 always @(posedge CLK or negedge RST_N) begin
     if(!RST_N) begin
         for(k=0;k<NUM_REG;k=k+1) begin
@@ -50,6 +37,16 @@ always @(posedge CLK or negedge RST_N) begin
                 end
             end
         end
+    end
+    if(WRITE_EN && (WRITE_ADDR == READ_ADDR1)) begin
+        READ_DATA1 <= WRITE_DATA;
+    end else begin
+        READ_DATA1 <= register[READ_ADDR1];
+    end
+    if(WRITE_EN && (WRITE_ADDR == READ_ADDR2)) begin
+        READ_DATA2 <= WRITE_DATA;
+    end else begin
+        READ_DATA2 <= register[READ_ADDR2];
     end
 
 end
