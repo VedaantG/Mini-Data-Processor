@@ -12,20 +12,20 @@ It is a combinational circuit used for arithmatic and logical operations. ALU in
 operations such as ADD, SUB, AND, OR etc (refer following table)
 
 
-0000 : add
-0001 : sub  
-0010 : and
-0011 : or
-0100 : xor
-0101 : nor
-0110 : sll
-0111 : srl
-1000 : sra
-1001 : slt
-1010 : pass a
-1011 : pass b
-1100 : mul
-1101 : div
+0000 : add<br>
+0001 : sub<br> 
+0010 : and<br>
+0011 : or<br>
+0100 : xor<br>
+0101 : nor<br>
+0110 : sll<br>
+0111 : srl<br>
+1000 : sra<br>
+1001 : slt<br>
+1010 : pass a<br>
+1011 : pass b<br>
+1100 : mul<br>
+1101 : div<br>
 
 This operations are used to process upcoming data in various tasks and helps to reduce load on main processor
 or microcontroller
