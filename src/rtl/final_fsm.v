@@ -25,7 +25,7 @@ module final_fsm#(
     output reg [OPRAND_LENGTH-1:0] imm_value,
     output reg [OPRAND_LENGTH-1:0] oprand_a,
     output reg [OPRAND_LENGTH-1:0] oprand_b,
-    output reg [4:0] opcode,
+    output reg [3:0] opcode,
 
     output reg fifo_read_en,
     output reg alu_start,
