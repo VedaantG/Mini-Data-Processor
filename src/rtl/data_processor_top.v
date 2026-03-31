@@ -72,6 +72,25 @@ fifo fifo_inst(
     .full(fifo_full)
 );
 
+wire read_add1;
+wire read_add2;
+wire write_add;
+wire write_data;
+wire write_en;
+wire read_data1;
+wire read_data2;
+register_file register_file_inst(
+    .READ_ADDR1(read_add1),
+    .READ_ADDR2(read_add2),
+    .WRITE_ADDR(write_add),
+    .WRITE_DATA(write_data),
+    .RST_N(RST_N),
+    .CLK(clk),
+    .WRITE_EN(write_en),
+    .READ_DATA1(read_data1),
+    .READ_DATA2(read_data2)
+);
+
 final_fsm final_fsm_inst(
     .clk(clk),
     .RST_N(RST_N),
@@ -88,6 +107,13 @@ final_fsm final_fsm_inst(
     .fifo_read_en(fifo_read_en),
     .alu_start(alu_start),
     .uart_tx_start(uart_tx_start),
-    .uart_tx_data(uart_tx_data)
+    .uart_tx_data(uart_tx_data),
+    .address1(read_add1),
+    .address2(read_add2),
+    .wb_address(write_add),
+    .read_data1(read_data1),
+    .read_data2(read_data2)
+    .reg_write_en(write_en),
+    .reg_write_data(write_data)
 );
 endmodule

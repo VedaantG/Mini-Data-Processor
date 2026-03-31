@@ -115,6 +115,9 @@ always@(posedge clk or negedge RST_N) begin
                 STATE <= IDLE;
             end
         end
+        default:begin
+            STATE <= IDLE;
+        end
         endcase
     end
 end
